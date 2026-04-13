@@ -12,13 +12,12 @@ import {
 import "@xyflow/react/dist/style.css";
 import { TriggerSheet } from "./TriggerSheet";
 import { ActionSheet } from "./ActionSheet";
-import {
-  PriceTrigger,
-  type PriceTriggerNodeMetadeta,
-} from "@/nodes/triggers/priceTrigger";
+import {PriceTrigger} from "@/nodes/triggers/priceTrigger";
+import type { PriceTriggerNodeMetadeta } from "common/types";
 import { Timer } from "@/nodes/triggers/timmer";
-import { Lighter, type TradingMetadata } from "@/nodes/actions/Lighter";
-import type { TimmerNodeMetadeta } from "@/nodes/triggers/timmer";
+import { Lighter} from "@/nodes/actions/Lighter";
+import type { TradingMetadata } from "common/types";
+import type { TimmerNodeMetadeta } from "common/types";
 import { HyperLiquid } from "@/nodes/actions/hyper-liquid";
 import { Backpack } from "@/nodes/actions/backpack";
 

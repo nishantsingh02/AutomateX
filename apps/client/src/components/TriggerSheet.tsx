@@ -21,9 +21,10 @@ import {
 } from "@/components/ui/select";
 import { useState } from "react";
 import type { NodeMetadata } from "./CreateWorkflow";
-import type { PriceTriggerNodeMetadeta } from "@/nodes/triggers/priceTrigger";
-import type { TimmerNodeMetadeta } from "@/nodes/triggers/timmer";
+import type { PriceTriggerNodeMetadeta } from "common/types";
+import type { TimmerNodeMetadeta } from "common/types";
 import { Input } from "./ui/input";
+import { SUPPORTED_ASSET } from "common/types";
 
 const SUPPORTED_TRIGGERS = [
   {
@@ -39,7 +40,7 @@ const SUPPORTED_TRIGGERS = [
   },
 ];
 
-export const SUPPORTED_ASSET = ["SOL", "ETH", "BTC"];
+// export const SUPPORTED_ASSET = ["SOL", "ETH", "BTC"];
 
 export const TriggerSheet = ({
   onSelect,

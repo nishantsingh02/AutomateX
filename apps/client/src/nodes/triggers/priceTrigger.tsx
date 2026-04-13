@@ -1,11 +1,12 @@
 // if the node is the first created node so it only need to have a handel one on righrt not on left 
 
 import { Handle, Position } from "@xyflow/react";
+import type { PriceTriggerNodeMetadeta } from "common/types";
 
-export type PriceTriggerNodeMetadeta = {
-  asset: string;
-  price: number;
-};
+// export type PriceTriggerNodeMetadeta = {
+//   asset: string;
+//   price: number;
+// };
 
 export function PriceTrigger({
   data,
