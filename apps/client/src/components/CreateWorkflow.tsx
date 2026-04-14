@@ -36,8 +36,8 @@ const nodeTypes = {
   "price-trigger": PriceTrigger,
   "timer": Timer,
   "hyper-liquid": HyperLiquid,
-  backpack: Backpack,
-  lighter: Lighter,
+  "backpack": Backpack,
+  "lighter": Lighter,
 };
 
 interface NodeType {
