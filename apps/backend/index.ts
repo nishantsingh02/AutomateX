@@ -1,20 +1,21 @@
 
 import express from "express"
-
+import mongoose from "mongoose"
 import json from "jsonwebtoken"
-const jsonSecreat="nishuinlove"
+const Secreat="nishuinlove"
+import {UserModel} from "db/client"
+import { Mongoose } from "mongoose"
 
 const app = express()
 
 app.post("./signup", (req, res) => {
-    const username = req.body.username;
+    const email = req.body.username;
     const password = req.body.password;
 
-    // check the username is not already excist in the db
-
-    // hash the password
-
-    // create an entity in the db 
+    UserModel.create({
+    email:email,
+        password: password
+    }) 
 })
 
 app.post("./signin", (req, res) => {
