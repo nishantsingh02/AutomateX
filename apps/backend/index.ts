@@ -1,10 +1,10 @@
 import express from "express";
 import jwt from "jsonwebtoken";
-import { UserModel } from "db/client";
+import { ExecutionModel, NodesModel, UserModel, WorkflowModel } from "db/client";
 import mongoose from "mongoose";
 mongoose.connect(process.env.MONGO_URL!);
 import bcrypt from "bcrypt";
-import { userSignUpSchema, userSignIpSchema } from "common/types";
+import { userSignUpSchema, userSignInSchema, CreateWorkflowSchema } from "common/types";
 import { authMiddleware } from "./middleware";
 
 const app = express();
@@ -54,7 +54,7 @@ app.post("/signup", async (req, res) => {
 
 app.post("/signin", async (req, res) => {
   try {
-    const parseData = userSignIpSchema.safeParse(req.body);
+    const parseData = userSignInSchema.safeParse(req.body);
 
     if (!parseData.success) {
       return res.status(401).json({
@@ -84,7 +84,7 @@ app.post("/signin", async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user._id },
+      { userId: user._id },
       process.env.JWT_SECERTE as string,
       {
         expiresIn: "7d",
@@ -103,12 +103,114 @@ app.post("/signin", async (req, res) => {
   }
 });
 
-app.put("/workflow", authMiddleware, (req, res) => {});
+app.post("/workflow", authMiddleware, async (req, res) => {
+  const userId = req.userId!;
 
-app.get("/workflow/:workflowId", authMiddleware, (req, res) => {});
+  if (!userId) {
+    return res.status(401).json({
+      message: "Unauthorized"
+    })
+  }
 
-app.post("/workflow/execution/:workflowId", authMiddleware, (req, res) => {});
+  const {success, data} = CreateWorkflowSchema.safeParse(req.body);
+  if(!success) {
+    return res.status(403).json({
+      message: "Incorrect inputs"
+    })
+  }
+  try {
+    const workflow = await WorkflowModel.create({
+      userId,
+      nodes: data.nodes,
+      edges: data.edges
+    })
+    return res.status(200).json({
+      message: "Workflow Created",
+      workflowId: userId
+    })
+  } catch (err) {
+    res.status(411).json({
+      message: "Failed to create a workflow"
+    })
+  }
+});
 
-app.get("/nodes", (req, res) => {});
+app.put("/workflow/:workflowId", authMiddleware, async (req, res) => {
+  try {
+    const userId = req.userId;
+    const workflowId = req.params.workflowId;
+
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const parsedData = CreateWorkflowSchema.safeParse(req.body);
+
+    if (!parsedData.success) {
+      return res.status(400).json({
+        message: "Incorrect inputs",
+        errors: parsedData.error.flatten(),
+      });
+    }
+
+    // update only if its belong to the user, if the userId matched
+    const updated = await WorkflowModel.findOneAndUpdate(
+      { _id: workflowId, userId },
+      {
+        nodes: parsedData.data.nodes,
+        edges: parsedData.data.edges,
+      },
+      { returnDocument: "after" } // return updated doc
+    );
+
+    if (!updated) {
+      return res.status(404).json({
+        message: "Workflow not found",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Workflow updated",
+      workflow: updated,
+    });
+
+  } catch (err) {
+    return res.status(500).json({
+      message: "Failed to update workflow",
+    });
+  }
+});
+
+app.get("/workflow/:workflowId", authMiddleware, async (req, res) => {
+  const workflow = await WorkflowModel.findById(req.params.workflowId);
+  
+  if(!workflow || workflow.userId.toString() != req.userId) {
+    return res.status(404).json({
+      message: "workflow not found"
+    })
+  }
+  return res.json(workflow)
+});
+
+app.get("/workflow", authMiddleware, async(req,res) => {
+  const workflow = await WorkflowModel.find({
+    userId: req.userId
+  });
+  return res.status(200).json({
+    workflow
+  })
+})
+
+app.post("/workflow/execution/:workflowId", authMiddleware, async (req, res) => {
+  // TODO: make sure the workflowe belongs to the user
+  const executions = await ExecutionModel.find({
+    workflowId: req.params.workflowId
+  })
+});
+
+app.get("/nodes", async (req, res) => {
+  const nodes = await NodesModel.find();
+  res.json(nodes)
+});
 
 app.listen(process.env.PORT || 3000);

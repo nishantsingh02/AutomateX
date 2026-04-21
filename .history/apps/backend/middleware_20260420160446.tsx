@@ -34,7 +34,7 @@ export const authMiddleware = (req:Request, res: Response , next: NextFunction) 
             process.env.JWT_SECERTE as string
         ) as { userId: string }
 
-        // console.log(decoded)
+        console.log(decoded)
 
 
         // set the user to request

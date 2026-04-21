@@ -82,7 +82,7 @@ export default function CreateWorkflow() {
   }, []);
 
   const onConnectEnd = useCallback((params, connectionInfo) => {
-    // console.log(connectionInfo);
+    console.log(connectionInfo);
     // user wants to create new node
     if (!connectionInfo.isValid) {
       setSelectAction({
