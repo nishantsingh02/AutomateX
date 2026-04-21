@@ -1,2 +1,2 @@
 export * from "./metadeta";
-export * from "./types"
+export * from "./"
