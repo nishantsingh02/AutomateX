@@ -192,15 +192,7 @@ export default function CreateWorkflow() {
           />
         )}
 
-        {/* Add an empty state with a button to re-open: */}
-        {!nodes.length && (
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center gap-4">
-            <p className="text-muted-foreground">No steps added yet</p>
-            <Button>
-              Add Trigger to Start
-            </Button>
-          </div>
-        )}
+        {!nodes.length}
 
         <ReactFlow
           nodes={nodes}
