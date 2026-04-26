@@ -29,7 +29,7 @@ export const HyperLiquid = ({
 
       {/* Title */}
       <div className="text-sm font-semibold text-gray-800">
-        Lighter Trade
+        HyperLiquid Trade
       </div>
 
       {/* Content */}

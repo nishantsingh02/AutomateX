@@ -5,7 +5,6 @@ import Auth from './components/pages/Auth'
 import Dashboard from './components/pages/Dashboard'
 import WorkflowDetail from './components/pages/WorkflowDetail'
 import WorkflowExecutions from './components/pages/WorkflowExecutions'
-import Landing from './components/pages/Landing'
 
 function App() {
 
@@ -14,7 +13,7 @@ function App() {
     <>
       <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Landing />} />
+        <Route path='/' />
         <Route path='/create-workflow' element={<CreateWorkflow/>} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/dashboard" element={<Dashboard />} />

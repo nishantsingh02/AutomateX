@@ -29,6 +29,7 @@ const Auth = () => {
         setError("Account created! Please log in.");
       }
     } catch (err: any) {
+      console.log(err)
       setError(err.response?.data?.message || "An error occurred");
     } finally {
       setLoading(false);

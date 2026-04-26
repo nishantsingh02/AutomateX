@@ -200,6 +200,10 @@ app.get("/workflow/executions/:workflowId", authMiddleware, async (req, res) => 
 app.get("/workflow/:workflowId", authMiddleware, async (req, res) => {
   const workflow = await WorkflowModel.findById(req.params.workflowId);
   
+  console.log("workflow.userId:", workflow?.userId.toString());
+  console.log("req.userId:", req.userId);
+  console.log("match:", workflow?.userId.toString() === req.userId);
+
   if(!workflow || workflow.userId.toString() != req.userId) {
     return res.status(404).json({
       message: "workflow not found"

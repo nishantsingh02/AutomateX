@@ -16,7 +16,7 @@ const Dashboard = () => {
     const fetchWorkflows = async () => {
       try {
         const data = await apiListWorkflows();
-        setWorkflows(data.workflows);
+        setWorkflows(data.workflow);
       } catch (err: any) {
         if (err.response?.status === 403) {
           navigate("/auth");
@@ -63,7 +63,7 @@ const Dashboard = () => {
           <p className="text-muted-foreground max-w-md mb-8">
             You haven't created any trading bots yet. Start by building a workflow to automate your trading strategy.
           </p>
-          <Button onClick={() => navigate("/createworkflow")} size="lg" className="rounded-full px-10">
+          <Button onClick={() => navigate("/create-workflow")} size="lg" className="rounded-full px-10">
             Build your first workflow
           </Button>
         </div>

@@ -24,6 +24,7 @@ import type { NodeMetadata } from "./CreateWorkflow";
 import { Input } from "./ui/input";
 import { SUPPORTED_ASSET } from "common/types";
 import type { TradingMetadata } from "common/types";
+import { Label } from "./ui/label";
 
 const SUPPORTED_ACTIONS = [
   {
@@ -50,8 +51,8 @@ export const ActionSheet = ({
   onSelect: (kind: NodeKind, metadata: NodeMetadata) => void;
   onClose?: () => void // this is to close the action sheet aftre creating new node
 }) => {
-  const [metadata, setMetadata] = useState<TradingMetadata>({});
-  const [selectedAction, setSelecetedAction] = useState(
+  const [metadata, setMetadata] = useState<TradingMetadata>({} as TradingMetadata);
+  const [selectedAction, setSelectedAction] = useState(
     SUPPORTED_ACTIONS[0].id,
   );
   return (
@@ -63,21 +64,21 @@ export const ActionSheet = ({
             Select the type of Action you need
           </SheetDescription>
         </SheetHeader>
-        <Select
+
+          <Select
           value={selectedAction}
-          onValueChange={(value) => setSelecetedAction(value)}
+          onValueChange={(value) => setSelectedAction(value)}
         >
           <SelectTrigger className="w-full max-w-48">
             <SelectValue placeholder="Select the trigger" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
+              
               {SUPPORTED_ACTIONS.map(({ id, title, description }) => (
-                <>
                   <SelectItem key={id} value={id}>
                     {title}
                   </SelectItem>
-                </>
               ))}
             </SelectGroup>
           </SelectContent>
@@ -142,6 +143,18 @@ export const ActionSheet = ({
                   </SelectGroup>
                 </SelectContent>
               </Select>
+
+              <div className="pt-4 pb-1">API_KEY *</div>
+              <Input
+                type="text"
+                onChange={(e) =>
+                  setMetadata((m) => ({
+                    ...m,
+                    api_key: e.target.value,
+                  }))
+                }
+              ></Input>
+
             </div>
           )}
 

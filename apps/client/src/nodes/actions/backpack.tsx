@@ -27,7 +27,7 @@ export const Backpack = ({
 
       {/* Title */}
       <div className="text-sm font-semibold text-gray-800">
-        Lighter Trade
+        Backpack Trade
       </div>
 
       {/* Content */}

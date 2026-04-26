@@ -3,7 +3,7 @@ import type { InternalAxiosRequestConfig, AxiosError } from "axios";
 
 
 // --- Constants ---
-const BACKEND_URL = "http://localhost:3001";
+const BACKEND_URL = "http://localhost:3000";
 const TOKEN_KEY = "trading_auth_token";
 
 // --- Type Definitions ---
@@ -143,8 +143,8 @@ export const apiGetWorkflow = async (workflowId: string): Promise<{ workflow: Wo
 /**
  * List all workflows for the user
  */
-export const apiListWorkflows = async (): Promise<{ workflows: Workflow[] }> => {
-  const response = await api.get("/workflows");
+export const apiListWorkflows = async (): Promise<{ workflow: Workflow[] }> => {
+  const response = await api.get("/workflow");  // fixd URL
   return response.data;
 };
 

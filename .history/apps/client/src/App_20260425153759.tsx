@@ -14,7 +14,7 @@ function App() {
     <>
       <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Landing />} />
+        <Route path='/' element={<Landing /</>} />
         <Route path='/create-workflow' element={<CreateWorkflow/>} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/dashboard" element={<Dashboard />} />
