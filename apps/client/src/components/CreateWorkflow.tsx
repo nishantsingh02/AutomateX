@@ -23,7 +23,8 @@ import type { TimmerNodeMetadeta } from "common/types";
 import { HyperLiquid } from "@/nodes/actions/hyper-liquid";
 import { Backpack } from "@/nodes/actions/backpack";
 import { useNavigate } from "react-router-dom";
-import { apiCreateWorkflow } from "@/lib/api";
+import { apiCreateWorkflow, apiUpdateWorkflow } from "@/lib/api";
+import type { WorkflowNode, WorkflowEdge } from "@/lib/api";
 import { Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -63,9 +64,21 @@ interface Edge {
   target: string;
 }
 
-export default function CreateWorkflow() {
-  const [nodes, setNodes] = useState<NodeType[]>([]);
-  const [edges, setEdges] = useState<Edge[]>([]);
+interface CreateWorkflowProps {
+  initialNodes?: NodeType[];
+  initialEdges?: Edge[];
+  workflowId?: string;
+  mode?: "create" | "edit";
+}
+
+export default function CreateWorkflow({
+  initialNodes = [],
+  initialEdges = [],
+  workflowId,
+  mode = "create",
+}: CreateWorkflowProps = {}) {
+  const [nodes, setNodes] = useState<NodeType[]>(initialNodes);
+  const [edges, setEdges] = useState<Edge[]>(initialEdges);
   const [selectAction, setSelectAction] = useState<{
     position: { x: number; y: number };
     startingNodeId: string;
@@ -73,6 +86,8 @@ export default function CreateWorkflow() {
   const [loading, setLoading] = useState(false);
   const [saveError, setSaveError] = useState("");
   const navigate = useNavigate();
+
+  const isEditMode = mode === "edit" && !!workflowId;
 
   const handleSave = async () => {
     if (nodes.length === 0) return;
@@ -88,8 +103,13 @@ export default function CreateWorkflow() {
           metadata: node.data.metadata,
         },
       }));
-      await apiCreateWorkflow({ nodes: backendNodes, edges });
-      navigate("/dashboard");
+      if (isEditMode) {
+        await apiUpdateWorkflow(workflowId, { nodes: backendNodes, edges });
+        navigate(`/workflow/${workflowId}`);
+      } else {
+        await apiCreateWorkflow({ nodes: backendNodes, edges });
+        navigate("/dashboard");
+      }
     } catch (err: any) {
       console.error("Failed to save Workflow", err);
       setSaveError(err.response?.data?.message || "Failed to save. Try again.");
@@ -131,7 +151,7 @@ export default function CreateWorkflow() {
       {/* Header */}
       <div className="absolute top-0 left-0 right-0 h-20 border-b bg-background/50 backdrop-blur-md z-30 flex items-center justify-between px-8">
         <h1 className="text-3xl font-extrabold tracking-tight">
-          Create workflow
+          {isEditMode ? "Edit Workflow" : "Create Workflow"}
         </h1>
         <div className="flex items-center gap-4">
           {saveError && (
@@ -143,7 +163,11 @@ export default function CreateWorkflow() {
             className="rounded-full px-6"
           >
             <Save className="mr-2 h-4 w-4" />
-            {loading ? "Saving..." : "Save Workflow"}
+            {loading
+              ? "Saving..."
+              : isEditMode
+                ? "Update Workflow"
+                : "Save Workflow"}
           </Button>
         </div>
       </div>
@@ -151,7 +175,7 @@ export default function CreateWorkflow() {
       <div style={{ width: "100vw", height: "100vh" }}>
 
         {/* TriggerSheet — always open when no nodes */}
-        {!nodes.length && (
+        {!isEditMode && !nodes.length && (
           <TriggerSheet
             onSelect={(type, metadata) => {
               setNodes([

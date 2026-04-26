@@ -5,6 +5,7 @@ import Auth from './components/pages/Auth'
 import Dashboard from './components/pages/Dashboard'
 import WorkflowDetail from './components/pages/WorkflowDetail'
 import WorkflowExecutions from './components/pages/WorkflowExecutions'
+import EditWorkflow from './components/pages/EditWorkflow'
 import Landing from './components/pages/Landing'
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Route path="/auth" element={<Auth />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/workflow/:workflowId" element={<WorkflowDetail />} />
+        <Route path="/workflow/:workflowId/edit" element={<EditWorkflow />} />
         <Route path="/workflow/:workflowId/executions" element={<WorkflowExecutions />} />
       </Routes>
       </BrowserRouter>
