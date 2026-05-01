@@ -1,0 +1,15 @@
+{
+  "name": "executer",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "db": "*"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
