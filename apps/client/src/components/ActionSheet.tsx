@@ -65,7 +65,7 @@ export const ActionSheet = ({
           </SheetDescription>
         </SheetHeader>
 
-          <Select
+        <Select
           value={selectedAction}
           onValueChange={(value) => setSelectedAction(value)}
         >
@@ -74,11 +74,11 @@ export const ActionSheet = ({
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              
+
               {SUPPORTED_ACTIONS.map(({ id, title, description }) => (
-                  <SelectItem key={id} value={id}>
-                    {title}
-                  </SelectItem>
+                <SelectItem key={id} value={id}>
+                  {title}
+                </SelectItem>
               ))}
             </SelectGroup>
           </SelectContent>
@@ -162,9 +162,9 @@ export const ActionSheet = ({
           <Button
             onClick={() => {
               onSelect(selectedAction as NodeKind, metadata);
-               onClose?.()
+              onClose?.()
             }
-        }
+            }
             type="submit"
           >
             Create Action

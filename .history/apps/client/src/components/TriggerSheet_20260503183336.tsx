@@ -13,6 +13,7 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -46,7 +47,9 @@ export const TriggerSheet = ({
   onSelect: (kind: NodeKind, metadata: NodeMetadata) => void;
   // onClose: () => void;
 }) => {
-  const [metadata, setMetadata] = useState<any>({
+  const [metadata, setMetadata] = useState<
+    PriceTriggerNodeMetadeta | TimmerNodeMetadeta
+  >({
     time: 3600,
   });
   const [selectedTrigger, setSelecetedTrigger] = useState(
@@ -70,7 +73,7 @@ export const TriggerSheet = ({
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              {SUPPORTED_TRIGGERS.map(({ id, title }) => (
+              {SUPPORTED_TRIGGERS.map(({ id, title, description }) => (
                 <>
                   <SelectItem key={id} value={id}>
                     {title}
@@ -86,11 +89,12 @@ export const TriggerSheet = ({
           {/* <Input type=""></Input> */}
           <Input
             value={metadata.time}
-            onChange={(e) => setMetadata((metadata: any) => ({
+            onChange={(e) => setMetadata(metadata => ({
               ...metadata,
               time: Number(e.target.value)
             }))}
-          />
+          >
+          </Input>
         </div>}
 
         {selectedTrigger == "price-trigger" && (
@@ -99,7 +103,7 @@ export const TriggerSheet = ({
             <Input
               type="text"
               onChange={(e) =>
-                setMetadata((m: any) => ({
+                setMetadata((m) => ({
                   ...m,
                   price: Number(e.target.value),
                 }))
@@ -109,7 +113,7 @@ export const TriggerSheet = ({
             <Select
               value={metadata.asset}
               onValueChange={(value) =>
-                setMetadata((metadata: any) => ({
+                setMetadata((metadata) => ({
                   ...metadata,
                   asset: value,
                 }))

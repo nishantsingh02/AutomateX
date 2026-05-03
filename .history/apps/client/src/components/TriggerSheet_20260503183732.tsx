@@ -86,11 +86,12 @@ export const TriggerSheet = ({
           {/* <Input type=""></Input> */}
           <Input
             value={metadata.time}
-            onChange={(e) => setMetadata((metadata: any) => ({
+            onChange={(e) => setMetadata(metadata: any => ({
               ...metadata,
               time: Number(e.target.value)
             }))}
-          />
+          >
+          </Input>
         </div>}
 
         {selectedTrigger == "price-trigger" && (
@@ -99,7 +100,7 @@ export const TriggerSheet = ({
             <Input
               type="text"
               onChange={(e) =>
-                setMetadata((m: any) => ({
+                setMetadata((m) => ({
                   ...m,
                   price: Number(e.target.value),
                 }))
@@ -109,7 +110,7 @@ export const TriggerSheet = ({
             <Select
               value={metadata.asset}
               onValueChange={(value) =>
-                setMetadata((metadata: any) => ({
+                setMetadata((metadata) => ({
                   ...metadata,
                   asset: value,
                 }))

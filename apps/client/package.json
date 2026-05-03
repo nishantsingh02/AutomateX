@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.2.8",
+    "@radix-ui/react-toast": "^1.2.15",
     "@tailwindcss/vite": "^4.2.2",
     "@xyflow/react": "^12.10.2",
     "axios": "^1.15.2",
@@ -18,6 +19,7 @@
     "clsx": "^2.1.1",
     "common": "*",
     "lucide-react": "^1.7.0",
+    "motion": "^12.38.0",
     "radix-ui": "^1.4.3",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
