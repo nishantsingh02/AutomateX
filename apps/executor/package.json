@@ -4,8 +4,10 @@
   "type": "module",
   "private": true,
   "dependencies": {
+    "@types/node": "^25.6.0",
     "common": "*",
     "db": "*",
+    "mongoose": "^9.6.1",
     "zod": "^4.3.6"
   },
   "devDependencies": {
