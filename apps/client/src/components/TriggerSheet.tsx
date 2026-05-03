@@ -18,8 +18,6 @@ import {
 } from "@/components/ui/select";
 import { useState } from "react";
 import type { NodeMetadata } from "./CreateWorkflow";
-import type { PriceTriggerNodeMetadeta } from "common/types";
-import type { TimmerNodeMetadeta } from "common/types";
 import { Input } from "./ui/input";
 import { SUPPORTED_ASSET } from "common/types";
 

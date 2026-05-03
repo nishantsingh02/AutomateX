@@ -2,20 +2,17 @@ import type { NodeKind } from "./CreateWorkflow";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetDescription,
   SheetFooter,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "@/components/ui/sheet";
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -24,7 +21,6 @@ import type { NodeMetadata } from "./CreateWorkflow";
 import { Input } from "./ui/input";
 import { SUPPORTED_ASSET } from "common/types";
 import type { TradingMetadata } from "common/types";
-import { Label } from "./ui/label";
 
 const SUPPORTED_ACTIONS = [
   {
@@ -75,7 +71,7 @@ export const ActionSheet = ({
           <SelectContent>
             <SelectGroup>
 
-              {SUPPORTED_ACTIONS.map(({ id, title, description }) => (
+              {SUPPORTED_ACTIONS.map(({ id, title }) => (
                 <SelectItem key={id} value={id}>
                   {title}
                 </SelectItem>

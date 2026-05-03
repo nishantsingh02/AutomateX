@@ -24,7 +24,7 @@ import { HyperLiquid } from "@/nodes/actions/hyper-liquid";
 import { Backpack } from "@/nodes/actions/backpack";
 import { useNavigate } from "react-router-dom";
 import { apiCreateWorkflow, apiUpdateWorkflow } from "@/lib/api";
-import type { WorkflowNode, WorkflowEdge } from "@/lib/api";
+
 import { Save } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
