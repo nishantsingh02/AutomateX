@@ -8,12 +8,47 @@ import cors from "cors";
 
 const app = express();
 
-app.use(cors({
-  origin: ["http://localhost:5173", "https://automate-x-client-lf1b.vercel.app"],
-  credentials: true
-}))
+const corsOptions: cors.CorsOptions = {
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, curl, Postman)
+    if (!origin) return callback(null, true);
+    // Allow localhost and any vercel.app subdomain (preview deployments)
+    if (
+      origin.startsWith("http://localhost") ||
+      origin.endsWith(".vercel.app")
+    ) {
+      return callback(null, true);
+    }
+    return callback(new Error(`CORS: origin '${origin}' not allowed`));
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+// Handle ALL preflight requests immediately — before any DB middleware
+app.options("*", cors(corsOptions));
+
+// Apply CORS to all other requests
+app.use(cors(corsOptions));
 
 app.use(express.json());
+
+// Lazy DB connection — skip preflight OPTIONS so they never touch the DB
+let dbConnected = false;
+app.use(async (req, _res, next) => {
+  if (req.method === "OPTIONS") return next();
+  if (!dbConnected) {
+    try {
+      await connectDB(process.env.MONGO_URL!);
+      dbConnected = true;
+      console.log("✅ Lazy MongoDB connected successfully for Serverless");
+    } catch (err: any) {
+      console.error("❌ Lazy MongoDB connection failed:", err.message || err);
+    }
+  }
+  next();
+});
 
 
 app.post("/signup", async (req, res) => {
@@ -221,16 +256,19 @@ app.get("/nodes", async (req, res) => {
   res.json(nodes)
 });
 
-console.log("⏳ Connecting to MongoDB:", process.env.MONGO_URL ? "URL loaded ✓" : "⚠️  MONGO_URL is undefined!");
-
-connectDB(process.env.MONGO_URL!)
-  .then(() => {
-    console.log("✅ MongoDB connected successfully");
-    app.listen(process.env.PORT || 3000, () => {
-      console.log(`🚀 Server running on port ${process.env.PORT || 3000}`);
+if (!process.env.VERCEL) {
+  console.log("⏳ Connecting to MongoDB:", process.env.MONGO_URL ? "URL loaded ✓" : "⚠️  MONGO_URL is undefined!");
+  connectDB(process.env.MONGO_URL!)
+    .then(() => {
+      console.log("✅ MongoDB connected successfully");
+      app.listen(process.env.PORT || 3000, () => {
+        console.log(`🚀 Server running on port ${process.env.PORT || 3000}`);
+      });
+    })
+    .catch((err) => {
+      console.error("❌ MongoDB connection failed:", err.message || err);
+      process.exit(1);
     });
-  })
-  .catch((err) => {
-    console.error("❌ MongoDB connection failed:", err.message || err);
-    process.exit(1);
-  });
+}
+
+export default app;
