@@ -2,9 +2,9 @@ import axios from "axios";
 import type { InternalAxiosRequestConfig, AxiosError } from "axios";
 
 
-// --- Constants ---
-const BACKEND_URL = "http://localhost:3000";
-// const BACKEND_URL = "https://automate-x-backend.vercel.app"; // production url
+// Automatically use localhost for local development, and the Vercel backend for production
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 
+  (import.meta.env.DEV ? "http://localhost:3000" : "https://automate-x-backend.vercel.app");
 const TOKEN_KEY = "trading_auth_token";
 
 // --- Type Definitions ---
