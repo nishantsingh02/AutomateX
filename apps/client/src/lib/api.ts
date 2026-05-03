@@ -1,10 +1,10 @@
 import axios from "axios";
 import type { InternalAxiosRequestConfig, AxiosError } from "axios";
 
-// --- Constants ---
-// const BACKEND_URL = "http://localhost:3000";
-const BACKEND_URL = "backend-production-28d5.up.railway.app"; // production url
-const TOKEN_KEY = "trading_auth_token";
+// // --- Constants ---
+// // const BACKEND_URL = "http://localhost:3000";
+// const BACKEND_URL = "backend-production-28d5.up.railway.app"; // production url
+// const TOKEN_KEY = "trading_auth_token";
 
 
 // Automatically use localhost for local development, and the Railway backend for production
