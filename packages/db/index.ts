@@ -167,6 +167,10 @@ export const WorkflowModel = model("Workflows", WorkflowSchema);
 
 export const UserModel = model("Users", UserSchema);
 
+export async function connectDB(uri: string) {
+  await mongoose.connect(uri);
+}
+
 
 
 

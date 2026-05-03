@@ -1,24 +1,44 @@
 import express from "express";
 import jwt from "jsonwebtoken";
-import { ExecutionModel, NodesModel, UserModel, WorkflowModel } from "db/client";
-import mongoose from "mongoose";
-mongoose.connect(process.env.MONGO_URL!);
-import bcrypt from "bcrypt";
+import { ExecutionModel, NodesModel, UserModel, WorkflowModel, connectDB } from "db/client";
+import bcrypt from "bcryptjs";
 import { userSignUpSchema, userSignInSchema, CreateWorkflowSchema } from "common/types";
 import { authMiddleware } from "./middleware";
 import cors from "cors";
 
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:3001",
+  "https://automate-x.vercel.app",
+];
+
 app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://automate-x-backend.vercel.app"
-  ],
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, curl, Postman)
+    if (!origin) return callback(null, true);
+    // Allow any vercel.app subdomain (preview deployments)
+    if (allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
+      return callback(null, true);
+    }
+    return callback(new Error(`CORS: origin '${origin}' not allowed`));
+  },
   credentials: true
-}));
+}))
 
 app.use(express.json());
+
+// Lazy DB connection — caches across serverless warm invocations
+let dbConnected = false;
+app.use(async (_req, _res, next) => {
+  if (!dbConnected) {
+    await connectDB(process.env.MONGO_URL!);
+    dbConnected = true;
+  }
+  next();
+});
+
 
 app.post("/signup", async (req, res) => {
   try {
@@ -225,4 +245,12 @@ app.get("/nodes", async (req, res) => {
   res.json(nodes)
 });
 
-app.listen(process.env.PORT || 3000);
+// Export for Vercel serverless
+export default app;
+
+// Start local dev server when not on Vercel
+if (!process.env.VERCEL) {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+}
+
