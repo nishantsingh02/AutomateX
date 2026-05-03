@@ -10,12 +10,12 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "@types/bcrypt": "^6.0.0",
+    "@types/bcryptjs": "^3.0.0",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.6.0",
-    "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.3",
     "common": "*",
     "cors": "^2.8.6",
     "db": "*",
