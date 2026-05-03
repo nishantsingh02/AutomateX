@@ -4,10 +4,9 @@ import type { InternalAxiosRequestConfig, AxiosError } from "axios";
 
 // --- Constants ---
 // const BACKEND_URL = "http://localhost:3000";
-const BACKEND_URL = "https://backend-production-8a98.up.railway.app"; // production url
-// const BACKEND_URL = import.meta.env.VITE_API_URL;
-console.log("BACKEND_URL:", BACKEND_URL);
-
+// const BACKEND_URL = "backend-production-8a98.up.railway.app"; // production url
+const BACKEND_URL = import.meta.env.VITE_API_URL;
+console.log("BACKEND_URL:", BACKEND_URL); 
 const TOKEN_KEY = "trading_auth_token";
 
 // --- Type Definitions ---
