@@ -8,36 +8,43 @@ import cors from "cors";
 
 const app = express();
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  "http://localhost:3001",
-  "https://automate-x.vercel.app",
-];
-
-app.use(cors({
+const corsOptions: cors.CorsOptions = {
   origin: (origin, callback) => {
     // Allow requests with no origin (mobile apps, curl, Postman)
     if (!origin) return callback(null, true);
-    // Allow any vercel.app subdomain (preview deployments)
-    if (allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
+    // Allow localhost and any vercel.app subdomain (preview deployments)
+    if (
+      origin.startsWith("http://localhost") ||
+      origin.endsWith(".vercel.app")
+    ) {
       return callback(null, true);
     }
     return callback(new Error(`CORS: origin '${origin}' not allowed`));
   },
-  credentials: true
-}))
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+// Handle ALL preflight requests immediately — before any DB middleware
+app.options("*", cors(corsOptions));
+
+// Apply CORS to all other requests
+app.use(cors(corsOptions));
 
 app.use(express.json());
 
-// Lazy DB connection — caches across serverless warm invocations
+// Lazy DB connection — skip preflight OPTIONS so they never touch the DB
 let dbConnected = false;
-app.use(async (_req, _res, next) => {
+app.use(async (req, _res, next) => {
+  if (req.method === "OPTIONS") return next();
   if (!dbConnected) {
     await connectDB(process.env.MONGO_URL!);
     dbConnected = true;
   }
   next();
 });
+
 
 
 app.post("/signup", async (req, res) => {
