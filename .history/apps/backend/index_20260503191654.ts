@@ -9,7 +9,7 @@ import cors from "cors";
 const app = express();
 
 app.use(cors({
-  origin: ["http://localhost:5173", "https://automate-x-client-lf1b.vercel.app"],
+  origin: ["http://localhost:5173", "https://automate-x-client-lf1b.vercel.app/"],
   credentials: true
 }))
 
