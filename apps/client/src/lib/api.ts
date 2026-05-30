@@ -4,7 +4,8 @@ import type { InternalAxiosRequestConfig, AxiosError } from "axios";
 
 // --- Constants ---
 // const BACKEND_URL = "http://localhost:3000";
-const BACKEND_URL = "https://automatex-kywa.onrender.com"; // production url
+// const BACKEND_URL = "https://automatex-kywa.onrender.com"; // production url
+const BACKEND_URL = "https://automatex-1.onrender.com"; // production url updated 
 
 
 const TOKEN_KEY = "trading_auth_token";
